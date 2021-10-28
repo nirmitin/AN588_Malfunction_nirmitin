@@ -156,4 +156,5 @@ lines(x = v, y = pi[, 2], col = "red")
 lines(x = v, y = pi[, 3], col = "red")
 ```
 **I also had issues with this section. I think we are meant to use the predict function in order to plot these confidence intervals.**
+
 **Overall, I think this was a great effort and was impressed by how you used novel solutions I would not have thought of. I think the main things to work on would be putting all of the if statements into the function in one chunk of code, and making sure the syntax of the if else statements are correct.**
