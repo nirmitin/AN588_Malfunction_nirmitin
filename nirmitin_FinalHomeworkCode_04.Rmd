@@ -36,6 +36,7 @@ Write a simple R function, Z.prop.test(), that can perform one- or two-sample Z-
 *z-test = (xbar - mu)/(sd/sqrt(n)) &*
 *validity check: ensure that (n∗p) > 5 and (n∗(1−p)) > 5*
 
+
 ```{r}
 #fulfills requirement 1
 Z.prop.test <- function(p1, n1, p2 = NULL, n2 = NULL, p0, alternative = c("two.sided", "less", "greater"), conf.level = 0.95) {
@@ -55,6 +56,14 @@ Z.prop.test <- function(p1, n1, p2 = NULL, n2 = NULL, p0, alternative = c("two.s
       ci <- c(lower, upper)
       ci
       t
+      
+      if (alternative == 'greater')
+        p <- pnorm(z, lower.tail = FALSE)
+      }
+      
+      if (alternative == 'less' ) { 
+        p <-norm(z, lower.tail = TRUE)
+      }
       #rule of thumb validity check
       #fulfills requirement 4
       if( (n1* m) < 5 & (n1*(1- m)) < 5){
@@ -79,6 +88,13 @@ Z.prop.test <- function(p1, n1, p2 = NULL, n2 = NULL, p0, alternative = c("two.s
     z
     p
     pt
+    if (alternative == 'greater')
+      p <- pnorm(z, lower.tail = FALSE)
+    }
+      
+    if (alternative == 'less' ) { 
+      p <-norm(z, lower.tail = TRUE)
+    }
     #rule of thumb validity check
     #fulfills requirement 4
     if( (n1* phat1) < 5 & (n1*(1- phat1)) < 5 | (n2* phat2) < 5 & (n2*(1- phat2)) < 5){
@@ -143,7 +159,7 @@ g
 
 **Identify and interpret the point estimate of the slope (β1), as well as the outcome of the test associated with the hypotheses H0: β1 = 0; HA: β1 ≠ 0.Also, find a 90 percent CI for the slope (β1) parameter.**
 <br>
-*For lm(), β1 is estimated to be 1.2180 while for loglm(), β1 is estimated to be 0.23415. This fits the alternate hypothesis since β1 ≠ 0. β1lm > β1log(lm) but I'm not sure how to interpret this due to the nature of the adjusted slope of a log function.*
+*Using the lm() functions and the summary() action called upon them, we can see that β1 ≠ 0 which allows us to reject the null hypothesis and accept the alternate hypothesis. The Pr(>|t|) is also much smaller than 0.05 (the p value used for statistical testing) which tells us that the differences in the data set are significant. β1lm > β1log(lm) but I'm not sure how to interpret this due to the nature of the adjusted slope of a log function.*
 ```{r}
 summary(lm)
 
@@ -172,9 +188,9 @@ lines(x = v, y = ci[, 3], col = "blue")
 lines(x = v, y = pi[, 2], col = "red")
 lines(x = v, y = pi[, 3], col = "red")
 ```
-
+*I'm not sure if the CI and PI interval lines have the right shape - I may have double logged one of the variables however when I remove both log calls on the x and y variables from either line 194 or 198, the lines disappear altogether.* 
 ```{r}
-v <- seq(from = 0, to = 500, by = 1)
+v <- seq(from = 0, to = 500, by = 0.1)
 m <- lm(data = d, log(MaxLongevity_m) ~ log(Brain_Size_Species_Mean))
 
 ci <- predict(m, newdata = data.frame(Brain_Size_Species_Mean = v), interval = "confidence", level = 0.90)
@@ -191,6 +207,7 @@ lines(x = v, y = pi[, 3], col = "red")
 **Produce a point estimate and associated 90 percent PI for the longevity of a species whose brain weight is 800 gm. Do you trust the model to predict observations accurately for this value of the explanatory variable? Why or why not?**
 <br>
 *The model doesn't accurately predict the value of this explanatory variable since the possible range it gives (within the bounds of the confidence interval) is too wide to give an accurate prediction. This could be due to a lack of data for specimens with this brain weights in this range.*
+
 ```{r}
 t <- coef(summary(lm))
 t <- data.frame(unlist(t))
@@ -209,4 +226,4 @@ pi
 
 **Looking at your two models, which do you think is better? Why?**
 <br>
-*Overall, I think that the normal lm model is better because more data points fall into it's 90% confidence and prediction intervals.*
+*Overall, I think that the log lm model is better since the confidence intervals have a tighter fit - this is important since the confidence intervals hug the line of best fit. Therefore, having a more precise CI is valuable.*
