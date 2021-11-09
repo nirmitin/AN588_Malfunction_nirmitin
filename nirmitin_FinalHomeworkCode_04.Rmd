@@ -107,6 +107,8 @@ Z.prop.test <- function(p1, n1, p2 = NULL, n2 = NULL, p0, alternative = c("two.s
   }
 ```
 
+*Looks like there may be a typo in the 2-sample part of your function that isn't allowing me to run it. p1 and p2 should just be proportions from the sample, and alternative="two.tailed", "less", or "greater" should be able to be defined in the function. It also looks like you defined z for a 2 sample but not 1 sample test. Also, the "if" part: if(is.null(p2) | is.null(n2)) should have an alternative "else" output that is for when there is a second sample (i.e p2 and n2 are not null). this may be what is disrupting the second part of the function.*
+
 ## **Challenge 2**
 The dataset from Kamilar and Cooper has in it a large number of variables related to life history and body size. For this exercise, the end aim is to fit a simple linear regression model to predict longevity (MaxLongevity_m) measured in months from species’ brain size (Brain_Size_Species_Mean) measured in grams. Do the following for both longevity~brain size and log(longevity)~log(brain size):
 
