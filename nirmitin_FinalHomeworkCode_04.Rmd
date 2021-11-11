@@ -139,6 +139,9 @@ g <- g + geom_smooth(method = "lm", formula = y ~ x)
 g
 ```
 
+*Check your intercept in your model vs on your graph. do they match? stay consistent in what you use as x/y variables! -mel *
+
+
 **Fitting a linear regression model for log(longevity)~log(brain size)**
 <br>
 *Now, I'll repeat the same code but for log(longevity)~log(brain size). It's interesting that this function removes rows containing "non-finite values and missing values). Visually, the confidence interval also looks wider for this graph.*
@@ -162,6 +165,9 @@ g
 **Identify and interpret the point estimate of the slope (β1), as well as the outcome of the test associated with the hypotheses H0: β1 = 0; HA: β1 ≠ 0.Also, find a 90 percent CI for the slope (β1) parameter.**
 <br>
 *Using the lm() functions and the summary() action called upon them, we can see that β1 ≠ 0 which allows us to reject the null hypothesis and accept the alternate hypothesis. The Pr(>|t|) is also much smaller than 0.05 (the p value used for statistical testing) which tells us that the differences in the data set are significant. β1lm > β1log(lm) but I'm not sure how to interpret this due to the nature of the adjusted slope of a log function.*
+
+*The log transformed values can't be interpreted too much because you are completely changing the units to reduce the skew in your model -mel*
+
 ```{r}
 summary(lm)
 
@@ -191,6 +197,10 @@ lines(x = v, y = pi[, 2], col = "red")
 lines(x = v, y = pi[, 3], col = "red")
 ```
 *I'm not sure if the CI and PI interval lines have the right shape - I may have double logged one of the variables however when I remove both log calls on the x and y variables from either line 194 or 198, the lines disappear altogether.* 
+
+*This looks good! You can also put the CIs and PIs from the predict() functions into a dataframe to be used by ggplot*
+
+
 ```{r}
 v <- seq(from = 0, to = 500, by = 0.1)
 m <- lm(data = d, log(MaxLongevity_m) ~ log(Brain_Size_Species_Mean))
@@ -225,6 +235,8 @@ pi <- predict(lm, newdata = data.frame(Brain_Size_Species_Mean = 800), interval 
     level = 0.90)  # for a single value
 pi
 ```
+
+*you can also directly put this value into the predict function -mel*
 
 **Looking at your two models, which do you think is better? Why?**
 <br>
